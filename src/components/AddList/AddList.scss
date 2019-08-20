@@ -1,0 +1,97 @@
+.add-list {
+    // padding-left: 20px;
+    // padding-right: 20px;
+    // padding-top: 10px;
+    &.type-form {
+        border: 1px solid #D9D9D9;
+        border-radius: 4px;
+        padding: 10px;
+        // 模拟其他表单控件
+        transition: all 0.3s, height 0s;
+        &:hover {
+            border-color: #40a9ff;
+        }
+    }
+
+    // 顶部标题，类似表头
+    .add-list-title-wrapper {
+        margin-left: 43px; // 空出加减按钮的位置
+        line-height: 1;
+        display: flex;
+        text-align: center;
+        font-size: 14px;
+        color: rgba(4, 0, 0, 0.65);
+        padding-bottom: 9px;
+        .add-list-title {
+            margin-right: 12px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+    // 内容
+    .add-list-item-wrapper {
+        .add-item {
+            display: flex;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .ant-form-item-children{
+                width: 100%;
+                >.ant-select{
+                    width: 100%;
+                }
+            }
+            .ant-form-item-control-wrapper {
+                width: 100%;
+            }
+            .radio-wrapper {
+                line-height: 32px;
+            }
+
+        }
+    }
+    // 底部按钮
+    .add-item-button {
+        border-top: 1px solid #D9D9D9;
+        text-align: center;
+        line-height: 30px;
+        i {
+            margin-right: 4px;
+        }
+    }
+
+
+
+    // 删除按钮
+    .minus-item-button, .plus-item-button {
+        font-size: 22px;
+        height: 22px;
+        // padding: 0 2px 0 4px;
+        margin-right: 20px;
+        position: relative;
+        top: 5px; // XXX:
+
+    }
+    .plus-item-button {
+        color: #1890ff;
+    }
+    .minus-item-button {
+        color: #FF3535;
+    }
+
+    .ant-form-item-control {
+        line-height: unset;
+    }
+}
+
+// 
+.inline-controls {
+    display: flex;
+    >* {
+        margin-right: 12px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
