@@ -1,0 +1,51 @@
+.voice-message-wrapper {
+    display: flex;
+    $height: 30px;
+    .voice-message {
+        min-width: 54px;
+        max-width: 240px;
+        height: $height;
+        border-radius: 2px;
+        font-size: 13px;
+        cursor: pointer;
+        .voice-icon {
+            width: 22px;
+            height: $height;
+            overflow: hidden;
+            position: relative;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            margin-left: 14px;
+            &.step1 svg {
+                left: -26px;
+            }
+            &.step2 svg {
+                left: -48px;
+            }
+            &.step3 svg {
+                left: -70px;
+            }
+            svg {
+                position: absolute;
+                height: 22px;
+            }
+        }
+    }
+    .voice-message-length {
+        color: rgba(#040000, 0.65);
+        padding-left: 10px;
+        line-height: $height;
+    }
+}
+
+// @keyframes play {
+//     33% {
+//         left: -26px;
+//     }
+//     66% {
+//         left: -48px;
+//     }
+//     99% {
+//         left: -70px;
+//     }
+// }
