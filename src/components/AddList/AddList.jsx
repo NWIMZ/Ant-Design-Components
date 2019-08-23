@@ -1,26 +1,33 @@
+// @ts-check
 /**
  * 自定义表单控件
  * @Author: Z 
  * @Date: 2019-06-03 09:40:14 
  * @Last Modified by: Z
- * @Last Modified time: 2019-08-20 18:56:39
+ * @Last Modified time: 2019-08-23 13:41:07
  */
 import React from 'react';
 import { Icon, message, Form } from "antd";
 import _ from 'lodash';
 import './AddList.scss';
+function getId(key, index) {
+    return key + '_' + index;
+}
 class AddList extends React.Component {
     /**
      * 
      * @param {object} props 
-     * @param {string[]} [props.widths] 
-     * @param {string} [props.primaryKey]
+     * @param {string} [props.dataIndex]
+     * @param {any[]} [props.columns]
      */
+    constructor(props) {
+        super(props);
+        const { dataIndex, columns } = props;
+        this.dataIndex = dataIndex || columns[0].key;
+    }
+
     static defaultProps = {
         defaultItem: {},// 新增时默认添加的数据
-        widths: [],
-        titles: [],
-        controls: [],
         onAdd: _.noop,
         onRemove: _.noop,
         onChange: _.noop,
@@ -30,20 +37,17 @@ class AddList extends React.Component {
     }
     // 通过from读写控件值
     // form 表单的values的key由字段+序号构成
-    // 通过指定primaryKey来标识一条记录，primaryKey不能重复
-    // 如果没在props里显式传入primaryKey，则默认使用controls中的第一个作为primaryKey
+    // 通过指定dataIndex来标识一条记录，dataIndex不能重复
+    // 如果没在props里显式传入dataIndex，则默认使用columns中的第一个作为dataIndex
     get(values) {
-        let { primaryKey, controls, extraParam } = this.props;
-        if (controls.length == 0) { return; }
+        let { columns, extraParam } = this.props;
+        if (columns.length === 0) { return; }
 
         // 所有字段
-        let fields = controls.map(({ code }) => {
-            return code;
-        });
+        let fields = columns.map(({ key }) => key);
         let keys = Object.keys(values);
-        primaryKey = primaryKey || keys[0].split('_')[0];
         return keys.filter((s) => {
-            return s.indexOf(primaryKey) != -1;
+            return s.indexOf(this.dataIndex) !== -1;
         }).map((s) => {
             return s.split('_')[1];
         }).sort((a, b) => {
@@ -52,7 +56,7 @@ class AddList extends React.Component {
         }).map((i) => {
             let result = {};
             fields.forEach((field) => {
-                result[field] = values[field + '_' + i];
+                result[field] = values[getId(field, i)];
             });
             return { ...result, ...extraParam };
         });
@@ -64,7 +68,7 @@ class AddList extends React.Component {
         (value || []).forEach((item, index) => {
             let keys = Object.keys(item);
             keys.forEach((key) => {
-                values[key + '_' + index] = item[key];
+                values[getId(key, index)] = item[key];
             });
         });
         form.setFieldsValue(values);
@@ -77,7 +81,6 @@ class AddList extends React.Component {
         // if (list.length <= 1) { return message.error(`至少要有一项`); }
         _.pullAt(value, [key]);
         form.resetFields();
-        // console.log('删除一条，当前数据', value);
         this.setState({ value }, () => {
             onChange && onChange(value);
             onRemove && onRemove(value);
@@ -93,7 +96,6 @@ class AddList extends React.Component {
             return;
         }
         value.push(defaultItem);
-        // console.log('新增一条，当前数据', value);
         this.setState({ value }, () => {
             onChange && onChange(value);
             onAdd(value.length);
@@ -101,11 +103,11 @@ class AddList extends React.Component {
     }
 
     handleChange = (val, code, index) => {
-        // let { primaryKey, onChange } = this.props;
+        // let { dataIndex, onChange } = this.props;
         // let { value } = this.state;
         // value = [...value];
         // let i = value.findIndex((item) => {
-        //     return item[primaryKey] == index;
+        //     return item[dataIndex] == index;
         // });
         // if (i != -1) {
         //     value[i] = {
@@ -114,7 +116,6 @@ class AddList extends React.Component {
         //     };
         // } 
         // this.setState({ value });
-        // // console.log(value);
         // onChange(value);
         setTimeout(() => {
             let { form, onChange, } = this.props;
@@ -122,7 +123,6 @@ class AddList extends React.Component {
             let { getFieldsValue } = form;
             let values = getFieldsValue();
             let value = this.get(values);
-            // console.log('修改一条，当前数据：', value);
             this.setState({ value }, () => {
                 onChange(value)
             });
@@ -136,7 +136,7 @@ class AddList extends React.Component {
     }
     componentDidUpdate(prevProps, prevState) {
         let { value } = this.state;
-        if (JSON.stringify(prevState.value) != JSON.stringify(value)) {
+        if (JSON.stringify(prevState.value) !== JSON.stringify(value)) {
             this.set();
         }
     }
@@ -148,94 +148,101 @@ class AddList extends React.Component {
         return {};
     }
     render() {
-        let {  ItemProps, unique, controls = [], titles, widths = [] } = this.props;
+        let { unique, columns, className = '' } = this.props;
         let { value } = this.state;
 
-        return <div className={"add-list"}>
-            <div className="add-list-title-wrapper">
-                {titles.map((t, i) => {
-                    let w = widths[i];
-                    return <div className="add-list-title" style={{ width: w }} key={i}>{t}</div>;
-                })}
-            </div>
-            <div className="add-list-item-wrapper">{value.map((data, key) => {
-                return <AddItem
+        return <table className={"add-list " + className}>
+            <thead className="add-list-title-wrapper">
+                <tr>
+                    <th></th>
+                    {columns.map(({ width, title, key }, i) => {
+                        return <th className="add-list-title" style={{ width }} key={key}>{title}</th>;
+                    })}
+                </tr>
+            </thead>
+            <tbody className="add-list-item-wrapper">{value.map((data, key) => {
+                return <AddItemRow
                     key={key}
                     index={key}
                     unique={unique}
                     onRemove={this.handleRemove}
-                ><Item {...ItemProps}
-                    onChange={this.handleChange}
-                    // onBlur={this.handleBlur}
-                    // onFocus={this.handleFocus}
-                    data={data} controls={controls} widths={widths}
-                    index={key} form={this.props.form} />
-                </AddItem>
+                ><Item
+                        index={key}
+                        onChange={this.handleChange}
+                        // onBlur={this.handleBlur}
+                        // onFocus={this.handleFocus}
+                        data={data}
+                        columns={columns}
+                        form={this.props.form} />
+                </AddItemRow>
             })}
-            </div>
-            <div>
-                <Icon type="plus-circle"
-                    className="plus-item-button cursor"
-                    title="新增"
-                    onClick={this.handleAdd}
-                />
-            </div>
-        </div>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <Icon type="plus-circle"
+                            className="plus-item-button cursor"
+                            title="新增"
+                            onClick={this.handleAdd}
+                        />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     }
 }
 export default Form.create({})(AddList);
 
 class Item extends React.Component {
-    getField(code, index) {
-        return code + '_' + index;
-    }
     render() {
-        let { widths, controls, form, index, onChange, data } = this.props;
+        let { columns, form, index, onChange, data } = this.props;
         const { getFieldDecorator } = form;
 
-        return <div className="inline-controls">
-            {controls.map(({ Ctrl, props, code, options, visible }, i) => {
-                let w = widths[i];
-                let id = this.getField(code, index);
-                // XXX:
-                let show = typeof visible == 'function' ? visible(data) : true;
-                return <div style={{ width: w }} key={i} >{
-                    <Form.Item>
-                        {getFieldDecorator(id, { ...options })(show ? <Ctrl
-                            onChange={(value) => {
-                                onChange(value, code, index);
-                            }}
-                            {...props}
-                        /> :
-                            <span></span>)}
-                    </Form.Item>
-                }</div>
+        return <React.Fragment>
+            {columns.map(({ Component, props, width, key, options, visible }, i) => {
+                let id = getId(key, index);
+                let show = typeof visible === 'function' ? visible(data) : true;
+                return <td className="add-list-item-control" key={i} >{
+                    show ?
+                        <Form.Item style={{ width }} >
+                            {getFieldDecorator(id, options)(<Component
+                                onChange={(value) => {
+                                    onChange(value, key, index);
+                                }}
+                                {...props}
+                            />)}
+                        </Form.Item>
+                        :
+                        null
+                }</td>
             })}
-        </div>
+        </React.Fragment>
     }
 }
 /**
  * AddList 直接子元素，用于包裹List的一行控件
  * @props {boolean} unique  是否是唯一的一个，是的话不显示删除该行按钮
- * @props index 索引 通过primaryKey 指定
+ * @props index 索引 通过dataIndex 指定
  * @props onRemove 删除按钮点击事件
  */
-class AddItem extends React.Component {
+class AddItemRow extends React.Component {
     handleRemove = () => {
         let { index, onRemove } = this.props;
         onRemove && onRemove(index)
     }
     render() {
         let { unique, children } = this.props;
-        return <div className="add-item">
-            {unique ? null :
-                <Icon type="minus-circle"
-                    className="minus-item-button cursor"
-                    title="删除该行"
-                    onClick={this.handleRemove}
-                />
-            }
+        return <tr className="add-list-item">
+            <td className="ant-form-item">
+                {unique ? null :
+                    <Icon type="minus-circle"
+                        className="minus-item-button cursor"
+                        title="删除该行"
+                        onClick={this.handleRemove}
+                    />
+                }
+            </td>
             {children}
-        </div>
+        </tr>
     }
 }
