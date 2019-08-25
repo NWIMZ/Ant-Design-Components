@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import "./VoiceMessage.scss"
-import VoiceWaveSvg from './VoiceWaveSvg.svg';
+import { ReactComponent as VoiceWaveSvg } from './VoiceWaveSvg.svg';
 export default class VoiceMessage extends React.Component {
     static defaultProps = {
         color: '#1890FF'
@@ -22,7 +22,7 @@ export default class VoiceMessage extends React.Component {
     play() {
         this.stop();
         this.setState({ step: 0 });
-        this.audio.play().then(() => {}, (e) => {
+        this.audio.play().then(() => { }, (e) => {
             console.error(e);
             this.stop();
         });

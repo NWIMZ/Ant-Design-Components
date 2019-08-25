@@ -1,3 +1,5 @@
+import React from 'react';
+import moment from 'moment';
 import defaultScannerSrc from './scanner.png';
 
 /**
@@ -62,7 +64,7 @@ export default class DashBoard extends React.Component {
         arcAlarmColor: '#F15654',
         // 数据
         centerData: {
-            value: 100,
+            value: 1,
             level: '优',
             title: '综合'
         },
@@ -354,7 +356,7 @@ export default class DashBoard extends React.Component {
 
         value = value.toFixed(1);
         let _textArr = value.split('.');
-        if (_textArr[1] == '0') {
+        if (_textArr[1] === '0') {
             value = _textArr[0];
         }
         ctx.fillText(value, 0, valueY);
@@ -436,7 +438,7 @@ export default class DashBoard extends React.Component {
             textAlign = 'start';
         } else if (cosVal < COS_90) {
             textAlign = 'end'
-        } else if (cosVal == COS_90) {
+        } else if (cosVal === COS_90) {
             textAlign = 'center';
         }
         return { x, y, textAlign };
@@ -472,10 +474,10 @@ export default class DashBoard extends React.Component {
         let totalWidth = textSize.width + valueSize.width + spaceWidth;
 
         let { x, y, textAlign } = this.calcTextPosition(index, radius, offset);
-        if (textAlign == 'center') {
+        if (textAlign === 'center') {
             x -= totalWidth / 2;
             y += textFontSize / 2;
-        } else if (textAlign == 'end') {
+        } else if (textAlign === 'end') {
             x -= totalWidth;
         }
 

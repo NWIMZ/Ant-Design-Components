@@ -1,6 +1,7 @@
 // @ts-check
 /**
  * 自定义表单控件
+ * 可增减的控件
  * @Author: Z 
  * @Date: 2019-06-03 09:40:14 
  * @Last Modified by: Z
