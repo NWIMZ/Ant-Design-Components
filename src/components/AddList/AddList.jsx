@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * 自定义表单控件
  * 可增减的控件
@@ -141,7 +140,7 @@ class AddList extends React.Component {
             this.set();
         }
     }
-    static getDerivedStateFromProps(nextProp, nextState) {
+    static getDerivedStateFromProps(nextProp, prevState) {
         let { value } = nextProp;
         if (value) {
             return { value };
@@ -151,7 +150,15 @@ class AddList extends React.Component {
     render() {
         let { unique, columns, className = '' } = this.props;
         let { value } = this.state;
-
+        columns = columns.filter(({ visible }) => {
+            if (typeof visible === 'function') {
+                return value.some((item) => {
+                    return visible(item);
+                });
+            } else {
+                return true;
+            }
+        })
         return <table className={"add-list " + className}>
             <thead className="add-list-title-wrapper">
                 <tr>

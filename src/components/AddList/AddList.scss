@@ -1,6 +1,6 @@
 .add-list {
     $button-size: 22px;
-    width: 100%;
+    // width: 100%;
 
     th, td {
         padding: 0;
@@ -37,13 +37,16 @@
             }
             // XXX:组合antd使用时的一些样式处理
             .ant-form-item-children {
-                width: 100%;
+                width: 100%!important;
                 >.ant-select {
-                    width: 100%;
+                    width: 100%!important;
                 }
             }
             .ant-form-item-control-wrapper {
-                width: 100%;
+                width: 100%!important;
+            }
+            .ant-input-group .ant-select.has-reload-select {
+                width: calc(100% - 26px)!important;
             }
             .radio-wrapper {
                 line-height: 32px;
