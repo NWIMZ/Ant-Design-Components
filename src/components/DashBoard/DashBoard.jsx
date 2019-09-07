@@ -96,7 +96,7 @@ export default class DashBoard extends React.Component {
     scannerAnimationId = null;
     mainAnimateId = null;
     render() {
-        let { width, height } = this;
+        let { width, height } = this.props;
         return <canvas className="dashboard" width={width} height={height} ref={this.ref}></canvas>
     }
     prepare() {
