@@ -1,0 +1,35 @@
+.notice-wrapper {
+    height: 28px;
+    // transition: width 0.5s;
+    // display: flex;
+    svg {
+        float: left;
+        top: 7px;
+        position: relative;
+        margin-right: getVW(27);
+        transition: fill 1s;
+        margin-right: 8px;
+        &.error {
+            fill: #ff4c4c;
+        }
+        &.warn {
+            fill: #ffaa00;
+        }
+    }
+    .report-item {
+        white-space: nowrap;
+        width: auto !important;
+        display: block !important;
+        float: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 28px;
+        line-height: 28px;
+        &.error {
+            color: #ff4c4c;
+        }
+        &.warn {
+            color: #ffaa00;
+        }
+    }
+}
