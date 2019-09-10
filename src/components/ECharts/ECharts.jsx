@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /*
  * @Author: Z 
  * @Date: 2019-09-07 19:36:30 
@@ -22,7 +23,7 @@ export default class ECharts extends React.Component {
         this.chart?.resize();
     }
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.option != this.props.option) {
+        if (prevProps.option !== this.props.option) {
             this.draw();
         }
     }
