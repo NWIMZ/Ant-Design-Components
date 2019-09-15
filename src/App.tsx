@@ -24,7 +24,7 @@ class Main extends React.Component {
             { name: '四十', value: 0.4 }
         ]
     }
-    handleChange = (value) => {
+    handleChange = (value:any) => {
         this.setState({ value });
     }
     render() {
@@ -51,7 +51,7 @@ class Main extends React.Component {
                 }]}
             />
             <pre>
-                {JSON.stringify(value, '', 4)}
+                {JSON.stringify(value, null, 4)}
             </pre>
             <DashBoard
                 keepConfig

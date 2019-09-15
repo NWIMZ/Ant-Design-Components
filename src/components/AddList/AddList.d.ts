@@ -29,18 +29,21 @@ declare interface AddListColumn {
     key: string;
     title: string;
     width: string;
-    Component: React.Component;
+    Component: React.ReactNode;
+    props?: any;
+    options?: any;
 
 }
 
 declare interface AddListProps {
     dataIndex: string;
-    columns: AddListColumn;
+    columns: AddListColumn[];
+    onChange: (value: any) => any;
     value: any[];
 
 }
 declare interface AddListState {
 
 }
-declare var aaa :string;
+declare var aaa: string;
 export default class AddList extends React.Component<AddListProps, AddListState>{ }
