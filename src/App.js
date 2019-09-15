@@ -6,14 +6,10 @@ import './App.css';
 
 import AddList from './components/AddList/AddList';
 import DashBoard from './components/DashBoard/DashBoard';
-import Canvas from './components/Canvas/Canvas';
-import VoiceMessage from './components/VoiceMessage/VoiceMessage';
-import LifeCycle from './components/LifeCycle/LifeCycle';
 function App() {
     return (
         <div className="App">
             <Main />
-            <VoiceMessage />
         </div>
     );
 }
@@ -33,7 +29,7 @@ class Main extends React.Component {
     }
     render() {
         let { value } = this.state;
-        return <React.Fragment>
+        return <div className='main'>
             <AddList
                 dataIndex='name'
                 value={value}
@@ -66,9 +62,7 @@ class Main extends React.Component {
                 }}
                 sideDataList={value}
             />
-            <Canvas />
-            <LifeCycle />
-        </React.Fragment>
+        </div>
     }
 }
 
