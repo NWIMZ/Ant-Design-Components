@@ -6,7 +6,9 @@ import './App.css';
 
 import AddList from './components/AddList/AddList';
 import DashBoard from './components/DashBoard/DashBoard';
+import Canvas from './components/Canvas/Canvas';
 import VoiceMessage from './components/VoiceMessage/VoiceMessage';
+import LifeCycle from './components/LifeCycle/LifeCycle';
 function App() {
     return (
         <div className="App">
@@ -56,6 +58,7 @@ class Main extends React.Component {
                 {JSON.stringify(value, '', 4)}
             </pre>
             <DashBoard
+                keepConfig
                 centerData={{
                     value: value.reduce((accu, curr) => { return +(curr.value || 0) + accu; }, 0) / value.length,
                     level: 'Good',
@@ -63,6 +66,8 @@ class Main extends React.Component {
                 }}
                 sideDataList={value}
             />
+            <Canvas />
+            <LifeCycle />
         </React.Fragment>
     }
 }

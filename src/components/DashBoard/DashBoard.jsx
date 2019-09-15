@@ -396,7 +396,6 @@ export default class DashBoard extends React.Component {
 
         // 占比的弧
         ctx.beginPath();
-        ctx.globalCompositeOperation = 'source-atop';
         ctx.strokeStyle = color || this.getColor(percent);
         if (isRoundCap) {
             ctx.lineCap = 'round';
@@ -411,8 +410,9 @@ export default class DashBoard extends React.Component {
             let _rad = beginRad + getRadian(arcAngle * (1 - percent));
             ctx.arc(0, 0, radius, _rad, beginRad + getRadian(arcAngle));
         }
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalCompositeOperation = 'source-atop';
         ctx.stroke();
+        ctx.globalCompositeOperation = 'source-over';
         ctx.restore();
     }
     /**
