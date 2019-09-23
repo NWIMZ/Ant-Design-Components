@@ -1,5 +1,5 @@
 import React from 'react';
-import AddList from './AddList';
+import AddList from '.';
 import { Input } from 'antd';
 
 export default class Main extends React.Component {

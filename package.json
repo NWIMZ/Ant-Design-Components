@@ -43,6 +43,7 @@
   "devDependencies": {
     "@types/echarts": "^4.1.12",
     "@types/lodash": "^4.14.138",
+    "@types/react-router-dom": "^4.3.5",
     "node-sass": "^4.12.0",
     "redux-devtools": "^3.5.0",
     "sass-loader": "^7.3.1"

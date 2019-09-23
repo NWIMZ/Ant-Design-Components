@@ -17,10 +17,10 @@ export default class ECharts extends React.Component {
     ref = React.createRef();
     draw() {
         let { option } = this.props;
-        this.chart?.setOption(option);
+        this.chart.setOption(option);
     }
     handleResize = () => {
-        this.chart?.resize();
+        this.chart.resize();
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.option !== this.props.option) {

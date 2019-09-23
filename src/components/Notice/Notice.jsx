@@ -7,7 +7,7 @@ class Notice extends React.Component {
         noticeList: [],
     }
     setWidth(index) {
-        let elem = this.ref.current ?.querySelectorAll('.report-item')[index];
+        let elem = this.ref.current.querySelectorAll('.report-item')[index];
         if (!elem) {
             elem = this.ref.current.querySelectorAll('.report-item')[0];
         }
@@ -28,7 +28,7 @@ class Notice extends React.Component {
             {
                 noticeList && noticeList.length !== 0 ?
                     <div className="notice-wrapper" style={{ width: width + 30 + 'px' }} ref={this.ref}>
-                        <ReportIcon className={this.getClassName(noticeList[this.index] ?.type, 'report-icon')} />
+                        <ReportIcon className={this.getClassName(noticeList[this.index].type, 'report-icon')} />
                         <Carousel dotPosition="left" beforeChange={this.handleBeforeChange} dots={false} autoplay>{
                             noticeList.map((infos, index) => {
                                 return <span

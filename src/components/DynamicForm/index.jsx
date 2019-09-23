@@ -9,11 +9,11 @@
 import React from 'react';
 import { Icon, message, Form } from "antd";
 import _ from 'lodash';
-import './AddList.scss';
+import './index.scss';
 function getId(key, index) {
     return key + '_' + index;
 }
-class AddList extends React.Component {
+class DynamicForm extends React.Component {
     /**
      * 
      * @param {object} props 
@@ -199,7 +199,7 @@ class AddList extends React.Component {
         </table>
     }
 }
-export default Form.create({})(AddList);
+export default Form.create({})(DynamicForm);
 
 class Item extends React.Component {
     render() {
@@ -228,7 +228,7 @@ class Item extends React.Component {
     }
 }
 /**
- * AddList 直接子元素，用于包裹List的一行控件
+ * DynamicForm 直接子元素，用于包裹List的一行控件
  * @props {boolean} unique  是否是唯一的一个，是的话不显示删除该行按钮
  * @props index 索引 通过dataIndex 指定
  * @props onRemove 删除按钮点击事件

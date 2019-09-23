@@ -1,8 +1,21 @@
-# TODO
+# Readme
+
+## 
 - typescript
+- scss
+- React
+- Redux
+- Ant Design
+- echarts
+- axios
+- moment
+- lodash
+- 路由：react-router-dom
+
+# TODO
+
 - redux
 
-- 路由
 - 注册登录
 - 上传下载
 - 权限控制
