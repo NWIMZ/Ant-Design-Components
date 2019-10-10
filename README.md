@@ -15,3 +15,5 @@
 - 色值16进制转rgb
 - CSS绘制三角形 (带阴影、两种方式：边框、transform)
 - jest测试
+- 自动生成版本号
+- Tree-shaking
