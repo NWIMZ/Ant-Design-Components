@@ -1,18 +1,16 @@
 import React from 'react';
-import { Input, Checkbox } from 'antd';
+import { Input, Checkbox, Radio } from 'antd';
 import TreeWrapper from './index';
 import treeDataList from './treeDataList.json';
-import dfs from './dfs';
 
 export default class Main extends React.Component {
     state = {
         checkedKeys: [],
-        queryString: '新增',
-        showSelected: true,
-        showUnselected: true
+        queryString: '',
+        mode: undefined
     }
     render() {
-        let { checkedKeys, queryString, showSelected, showUnselected } = this.state;
+        let { checkedKeys, queryString, mode } = this.state;
         return <div>
 
             <div>
@@ -26,32 +24,23 @@ export default class Main extends React.Component {
             </div>
 
             <div>
-                <label>显示选中
-                <Checkbox checked={showSelected} onChange={(event) => {
-                        this.setState({
-                            showSelected: event.target.checked
-                        })
-                    }} />
-                </label>
-                <label>显示未选中
-                <Checkbox checked={showUnselected} onChange={(event) => {
-                        this.setState({
-                            showUnselected: event.target.checked
-                        })
-                    }} />
-                </label>
+                <Radio.Group onChange={(event) => {
+                    console.log(event.target.value);
+                    let mode = event.target.value;
+                    this.setState({ mode });
+                }}>
+                    <Radio.Button value={'showSelected'}>显示选中</Radio.Button>
+                    <Radio.Button value={'showUnselected'}>显示未选中</Radio.Button>
+                    <Radio.Button value={undefined}>显示全部</Radio.Button>
+                </Radio.Group>
             </div>
 
             <TreeWrapper
                 keyField={'menuId'}
                 titleField={'menuName'}
                 childField={'children'}
-
-                showSelected={showSelected}
-                showUnselected={showUnselected}
-
+                filterMode={mode}
                 queryString={queryString}
-
                 treeDataList={treeDataList}
                 checkedKeys={checkedKeys}
                 onCheck={(checkedKeys: [], ...params: []) => {
@@ -64,13 +53,3 @@ export default class Main extends React.Component {
         </div>
     }
 }
-
-
-const tester = () => {
-    let a = dfs(treeDataList, (item) => {
-        return item.menuName.indexOf('新增') !== -1;
-    });
-
-    console.log(a);
-}
-tester()
