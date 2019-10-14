@@ -1,3 +1,11 @@
+# 版本管理
+工具:git,Commitizen
+```bash
+npm install -g commitizen
+```
+```bash
+commitizen init cz-conventional-changelog --save --save-exact
+```
 # TODO
 - typescript
 - redux
