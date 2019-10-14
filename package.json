@@ -13,17 +13,20 @@
     "moment": "^2.24.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-loadable": "^5.5.0",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
     "redux": "^4.0.4",
+    "source-map-explorer": "^2.1.0",
     "typescript": "^3.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +46,7 @@
   "devDependencies": {
     "@types/echarts": "^4.1.12",
     "@types/lodash": "^4.14.138",
+    "@types/react-loadable": "^5.5.1",
     "@types/react-router-dom": "^4.3.5",
     "node-sass": "^4.12.0",
     "redux-devtools": "^3.5.0",
