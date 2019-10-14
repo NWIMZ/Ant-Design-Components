@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import Router from './Router';
+import Router from './router/Router';
 import './App.css';
 
 function App() {
