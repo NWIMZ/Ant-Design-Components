@@ -1,49 +1,29 @@
 import React from 'react';
-/**
- * @typedef {Object} AddListColumn
- * @property {string} key 
- * @property {string} title 
- * @property {string} width 
- * @property {React.Component} Component 控件组件
- * @property {Object} props 组件需传入的属性
- * @property {Object} options 传入form.getFieldDecorator
- * 
- */
-
-/**
- * @typedef {Object} AddListProps
- * 
- * @property {Object} props 
- * @property {string} props.dataIndex
- * @property {AddListColumn[]} props.columns
- * @property {any[]} [props.value] 组件的值，传值则变为受控组件
- * @property {function} [props.onChange] value发生任何改变时的回调 设置了value必须设置onChange
- * @property {Object} [props.extraParam] 额外的值
- */
-
-/**
- * @extends React.Component<AddListProps>
- */
-
-declare interface AddListColumn {
+declare interface Column {
     key: string;
     title: string;
     width: string;
+    /**控件组件 */
     Component: React.ReactNode;
+    /**组件需传入的属性 */
     props?: any;
+    /**传入form.getFieldDecorator */
     options?: any;
 
 }
 
-declare interface AddListProps {
-    dataIndex: string;
-    columns: AddListColumn[];
+declare interface Props {
+    dataIndex?: string;
+    columns: Column[];
+    /**value发生任何改变时的回调 设置了value必须设置onChange */
     onChange: (value: any) => any;
+    /**组件的值，传值则变为受控组件 */
     value: any[];
+    /**额外的值 */
+    extraParam?: any;
+}
+declare interface State {
 
 }
-declare interface AddListState {
 
-}
-declare var aaa: string;
-export default class AddList extends React.Component<AddListProps, AddListState>{ }
+export default class AddList extends React.Component<Props, State>{ }
