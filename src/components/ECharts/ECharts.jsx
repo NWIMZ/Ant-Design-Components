@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import echarts from 'echarts/lib/echarts';
+import classnames from 'classnames';
 import _ from 'lodash';
 export default class ECharts extends React.Component {
     static defaultProps = {
@@ -42,6 +43,6 @@ export default class ECharts extends React.Component {
     }
     render() {
         let { onMount, option, className, ...restProps } = this.props;
-        return <div ref={this.ref} className={'echarts-wrapper ' + className} {...restProps}></div>
+        return <div ref={this.ref} className={classnames('echarts-wrapper', className)} {...restProps}></div>
     }
 }

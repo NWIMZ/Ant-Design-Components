@@ -1,7 +1,20 @@
 # Readme
 
-## 
-# 版本管理
+## packages
+
+- typescript
+- React
+- Redux
+- Ant Design
+- moment
+- lodash
+- echarts
+- axios
+- scss
+- react-router-dom
+- classnames
+
+## 版本管理
 工具:git,Commitizen
 ```bash
 npm install -g commitizen
@@ -9,21 +22,13 @@ npm install -g commitizen
 ```bash
 commitizen init cz-conventional-changelog --save --save-exact
 ```
-# TODO
-- typescript
-- scss
-- React
-- Redux
-- Ant Design
-- echarts
-- axios
-- moment
-- lodash
-- 路由：react-router-dom
+使用`git cz`代替`git commit`
 
-# TODO
 
-- redux
+
+
+## TODO
+
 
 - 注册登录
 - 验证码 （传统、滑动）

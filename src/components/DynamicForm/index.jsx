@@ -9,17 +9,12 @@
 import React from 'react';
 import { Icon, message, Form } from "antd";
 import _ from 'lodash';
+import classnames from 'classnames';
 import './index.scss';
 function getId(key, index) {
     return key + '_' + index;
 }
 class DynamicForm extends React.Component {
-    /**
-     * 
-     * @param {object} props 
-     * @param {string} [props.dataIndex]
-     * @param {any[]} [props.columns]
-     */
     constructor(props) {
         super(props);
         const { dataIndex, columns } = props;
@@ -159,7 +154,7 @@ class DynamicForm extends React.Component {
                 return true;
             }
         })
-        return <table className={"add-list " + className}>
+        return <table className={classnames("add-list", className)}>
             <thead className="add-list-title-wrapper">
                 <tr>
                     <th></th>

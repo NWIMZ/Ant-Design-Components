@@ -5,6 +5,7 @@
  * @Last Modified time: 2019-08-23 17:50:34
  */
 import React from 'react';
+import classnames from 'classnames';
 import "./VoiceMessage.scss"
 import { ReactComponent as VoiceWaveSvg } from './VoiceWaveSvg.svg';
 export default class VoiceMessage extends React.Component {
@@ -51,14 +52,14 @@ export default class VoiceMessage extends React.Component {
     render() {
         let { src, color, length, className = '' } = this.props;
         let { step } = this.state;
-        return <div className={"voice-message-wrapper " + className}>
+        return <div className={classnames("voice-message-wrapper ", className)}>
             <div
                 className="voice-message"
                 style={{ backgroundColor: color }}
                 onClick={this.handleClick}
             >
                 <audio ref={this.ref} preload="auto" src={src} ></audio>
-                <div className={"voice-icon step" + step}>
+                <div className={classnames("voice-icon step", step)}>
                     <VoiceWaveSvg width={null} height={null} />
                 </div>
             </div>
