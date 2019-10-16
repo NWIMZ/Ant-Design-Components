@@ -48,8 +48,8 @@ const CONFIG = {
     },
 }
 const COS_90 = Math.cos(getRadian(90));// js cos(90)算不准
-function getRadian(angle) {
-    return angle * Math.PI / 180;
+function getRadian(a) {
+    return a * Math.PI / 180;
 }
 export default class DashBoard extends React.Component {
     static defaultProps = {

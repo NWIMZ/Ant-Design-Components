@@ -1,4 +1,5 @@
 import React from 'react';
+// TODO:需要实现scanner.png的效果
 export default class Canvas extends React.Component {
     ref = React.createRef();
     draw(){
