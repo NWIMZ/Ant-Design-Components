@@ -1,5 +1,8 @@
 export default [
     {
+        path: '/',
+        component: () => import('../pages/Tester'),
+    }, {
         path: '/home',
         component: () => import('../pages/Home')
     }, {

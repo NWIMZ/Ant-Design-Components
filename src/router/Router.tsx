@@ -6,7 +6,7 @@ export default function () {
     return <BrowserRouter>
         <Switch>
             {
-                routes.map(({ path, component }) => <Route path={path} component={LoadableComponent(component)} />)
+                routes.map(({ path, component }, i) => <Route path={path} key={i} component={LoadableComponent(component)} />)
             }
         </Switch>
     </BrowserRouter>
