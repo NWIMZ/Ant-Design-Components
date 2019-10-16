@@ -10,6 +10,26 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}",
-        }
+            // 关闭安全策略以允许跨域
+            "runtimeArgs": [
+                "--disable-web-security",
+                "--user-data-dir"
+            ]
+        },
+        {
+            "name": "Launch localhost in FireFox",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch localhost in Microsoft Edge",
+            "type": "edge",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        },
     ]
 }
