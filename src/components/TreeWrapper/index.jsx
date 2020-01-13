@@ -1,6 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import { Tree } from 'antd';
+const { TreeNode } = Tree;
+
 const filterTree = (tree, filter, fields = { children: 'children' }) => {
     const walk = (list, depth) => {
         let result = [];
@@ -19,7 +21,6 @@ const filterTree = (tree, filter, fields = { children: 'children' }) => {
     }
     return walk(tree);
 }
-const { TreeNode } = Tree;
 
 // 点击父节点时，展开它而不是选中它
 // 通过控制expandedKeys实现
@@ -36,9 +37,9 @@ export default class TreeWrapper extends React.Component {
         }
     }
     static defaultProps = {
-        cancelable: false,
-        selectToExpand: true,
-        // treeDataList: treeDataList,
+        cancelable: true,
+        selectToExpand: false,
+        treeDataList: [],
         // checkedKeys: [],
         // onCheck: _.noop,
         // keyField: 'menuId',
@@ -53,9 +54,11 @@ export default class TreeWrapper extends React.Component {
         showUnselected: true,
     }
     state = {
+        checkedKeys: this.props.checkedKeys || [],
+        halfCheckedKeys: this.props.halfCheckedKeys || [],
         selectedKeys: [],
         expandedKeys: [],
-        filteredTreeList: []
+        filteredTreeData: []
     }
 
     handleExpand = (ek) => {
@@ -63,17 +66,17 @@ export default class TreeWrapper extends React.Component {
         expandedKeys || this.setState({ expandedKeys: ek });
         onExpand && onExpand(ek);
     }
-    handleSelect = (selectedKeys, { selected, selectedNodes, node, event }) => {
+    handleSelect = (selectedKeys, { node, ...rest }) => {
         let { selectToExpand, cancelable } = this.props;
 
         if (!cancelable) {
             selectedKeys = [node.props.eventKey];
         }
         if (selectToExpand) {
-            this.selectToExpand(selectedKeys, { selected, selectedNodes, node, event });
+            this.selectToExpand(selectedKeys, { node, ...rest });
         } else {
             let { onSelect } = this.props;
-            onSelect && onSelect(selectedKeys, { selected, selectedNodes, node, event })
+            onSelect && onSelect(selectedKeys, { node, ...rest })
         }
     }
 
@@ -103,23 +106,50 @@ export default class TreeWrapper extends React.Component {
         }
     }
 
-    handleCheck = (value, event, ...restParams) => {
-        let { onCheck, checkedKeys } = this.props;
-        let { checked, halfCheckedKeys, node: { props: { eventKey, children } } } = event;
+    findRaw(list, key, parent) {
+        let { keyField, childField } = this.props;
+        let self = null;
+
+        list.some((item) => {
+            if (item[keyField] == key) {
+                self = item;
+            } else {
+                if (item[childField]) {
+                    let temp = this.findRaw(item[childField], key, item);
+                    self = temp.self;
+                    parent = temp.parent;
+                }
+            }
+            return self;
+        })
+        return { self, parent };
+    }
+
+    // 重写onCheck方法
+    // 由于树会过滤掉一部分,checkedKeys halfCheckedKeys也会在onCheck的时候丢失
+    // 所以手动实现onCheck,记录每次的checkedKeys,halfCheckedKeys
+    handleCheck = (k, event, ...restParams) => {
+        let { onCheck, childField, keyField, treeDataList } = this.props;
+        let { checkedKeys, halfCheckedKeys } = this.state;
+        let { checked, node: { props: { eventKey } } } = event;
+        checkedKeys = [...checkedKeys];
+        halfCheckedKeys = [...halfCheckedKeys];
+        let { self, parent } = this.findRaw(treeDataList, eventKey);
+        console.log(self, parent);
+        let children = self[childField]
+
+        if (checked) {
+            // 选中
+            checkedKeys.push(eventKey);
+        } else {
+            // 反选
+            _.remove(checkedKeys, (key) => { return key == eventKey; });
+            // 找到当前的父级
+        }
         // 如果点击的是父级
         if (children && children.length !== 0) {
             // 找出当前父级下的所有子级key
-            const getKeys = (list) => {
-                return list.reduce((accu, { key, props: { children } }) => {
-                    if (children && children instanceof Array && children.length !== 0) {
-                        return accu.concat(getKeys(children));
-                    } else {
-                        accu.push(key);
-                        return accu;
-                    }
-                }, []);
-            }
-            let keys = getKeys(children);
+            let keys = children.map(({ [keyField]: key }) => key);
             if (checked) {
                 checkedKeys = checkedKeys.concat(keys);
             } else {
@@ -127,31 +157,26 @@ export default class TreeWrapper extends React.Component {
                     _.remove(checkedKeys, (key) => { return key == k; });
                 });
             }
-        } else {
-            // 如果点击的是子级
-            if (checked) {
-                checkedKeys.push(eventKey);
-            } else {
-                _.remove(checkedKeys, (key) => { return key == eventKey; });
-            }
         }
-        onCheck(checkedKeys, event, ...restParams);
+        this.setState({ checkedKeys, halfCheckedKeys });
+        // onCheck && onCheck(checkedKeys, event, ...restParams);
     }
     getFilteredData() {
         let { treeDataList, filterMode, keyField, titleField,
-            queryString, checkedKeys } = this.props;
+            queryString } = this.props;
+        let { checkedKeys, halfCheckedKeys } = this.state;
         let list = JSON.parse(JSON.stringify(treeDataList));
 
         return filterTree(list, (item) => {
-            let isShow = false;
+            let isShow;
             switch (filterMode) {
                 case 'showSelected':
-                    isShow = isShow || checkedKeys.some((id) => {
+                    isShow = [...checkedKeys, ...halfCheckedKeys].some((id) => {
                         return id == item[keyField];
                     });
                     break;
                 case 'showUnselected':
-                    isShow = isShow || !checkedKeys.some((id) => {
+                    isShow = ![...checkedKeys, ...halfCheckedKeys].some((id) => {
                         return id == item[keyField];
                     });
                     break;
@@ -172,30 +197,38 @@ export default class TreeWrapper extends React.Component {
 
 
     componentDidMount() {
-        this.setState({ filteredTreeList: this.getFilteredData() });
+        this.setState({ filteredTreeData: this.getFilteredData() });
     }
     componentDidUpdate(prevProps) {
-        let { queryString, filterMode } = this.props;
-        if (prevProps.queryString !== queryString || filterMode !== prevProps.filterMode) {
-            this.setState({ filteredTreeList: this.getFilteredData() });
+        let { queryString, filterMode, treeDataList } = this.props;
+        if (prevProps.treeDataList !== treeDataList ||
+            prevProps.queryString !== queryString ||
+            filterMode !== prevProps.filterMode) {
+            this.setState({ filteredTreeData: this.getFilteredData() });
         }
     }
     render() {
         let { onCheck, children, ...restProps } = this.props;
         let { expandedKeys, selectedKeys,
-            filteredTreeList } = this.state;
+            checkedKeys, halfCheckedKeys,
+            filteredTreeData } = this.state;
 
         return <Tree
             defaultExpandAll
             checkable
             expandedKeys={expandedKeys}
             selectedKeys={selectedKeys}
+            checkStrictly
             {...restProps}
+            checkedKeys={{
+                checked: checkedKeys,
+                halfChecked: halfCheckedKeys
+            }}
             onCheck={this.handleCheck}
             onExpand={this.handleExpand}
             onSelect={this.handleSelect}
         >
-            {this.getTreeNodes(filteredTreeList)}
+            {this.getTreeNodes(filteredTreeData)}
         </Tree>
     }
 }

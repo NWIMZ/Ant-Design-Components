@@ -1,54 +1,48 @@
 import React from 'react';
-import { Input, Checkbox, Radio } from 'antd';
+import { Input, Radio } from 'antd';
+import './index.scss'
 import TreeWrapper from './index';
 import treeDataList from './treeDataList.json';
 
 export default class Main extends React.Component {
     state = {
-        checkedKeys: [],
         queryString: '',
         mode: undefined
     }
+    handleQueryChange = (event) => {
+        this.setState(({
+            queryString: event.target.value
+        }))
+    }
+    handleModeChange = (event) => {
+        this.setState({
+            mode: event.target.value
+        });
+    }
     render() {
-        let { checkedKeys, queryString, mode } = this.state;
-        return <div>
-
+        let { queryString, mode } = this.state;
+        return <div className="test-treewrapper">
             <div>
                 <Input
                     value={queryString}
-                    onChange={(event) => {
-                        this.setState(({
-                            queryString: event.target.value
-                        }))
-                    }} />
+                    onChange={this.handleQueryChange}
+                />
             </div>
-
             <div>
-                <Radio.Group onChange={(event) => {
-                    console.log(event.target.value);
-                    let mode = event.target.value;
-                    this.setState({ mode });
-                }}>
+                <Radio.Group onChange={this.handleModeChange}>
                     <Radio.Button value={'showSelected'}>显示选中</Radio.Button>
                     <Radio.Button value={'showUnselected'}>显示未选中</Radio.Button>
                     <Radio.Button value={undefined}>显示全部</Radio.Button>
                 </Radio.Group>
             </div>
-
             <TreeWrapper
                 keyField={'menuId'}
                 titleField={'menuName'}
                 childField={'children'}
+                selectToExpand
                 filterMode={mode}
                 queryString={queryString}
                 treeDataList={treeDataList}
-                checkedKeys={checkedKeys}
-                onCheck={(checkedKeys: [], ...params: []) => {
-                    console.log(...params);
-                    this.setState({
-                        checkedKeys
-                    })
-                }}
             />
         </div>
     }

@@ -1,18 +1,59 @@
 .add-list {
     $button-size: 22px;
-    // width: 100%;
+    .add-list-title {
+        box-sizing: content-box;
+    }
+    // 隐藏字段
+    .hidden-field{
+        visibility: hidden;
+        width: 0;
+        margin: 0;
+        padding: 0;
+    }
+    // AddList嵌套时，修改样式
+    .add-list {
+        // border-left: 1px solid #D9D9D9;
+        position: relative;
+        margin-left: 28px;
+        &:before{
+            display: block;
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: #D9D9D9;
+            left: -20px;
+            top: 0;
+        }
+        .add-list-title-wrapper {
+            display: none;
+        }
+        
 
+        .add-list-item-wrapper {
+            .add-list-item:last-child {
+                .ant-form-item {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
     th, td {
         padding: 0;
         margin: 0;
         border: 0;
         padding-left: 12px;
         vertical-align: top;
-        &:first-child {
+        &:first-child,&.add-button-title,&.divide-line {
             padding-left: 0;
             width: 30px;
             text-align: left;
-
+        }
+        &.add-button-title{
+            width: 42px;
+        }
+        &.divide-line{
+            width: 28px;
         }
     }
     // 顶部标题，类似表头
@@ -35,14 +76,15 @@
             &:last-child {
                 margin-bottom: 0;
             }
-            // XXX:组合antd使用时的一些样式处理
+
+            // 组合antd使用时的一些样式处理
             .ant-form-item-children {
                 width: 100%!important;
                 >.ant-select {
                     width: 100%!important;
                 }
             }
-            .ant-form-item-control-wrapper {
+            .ant-form-item-control-wrapper,.ant-input-number {
                 width: 100%!important;
             }
             .ant-input-group .ant-select.has-reload-select {
@@ -71,6 +113,39 @@
     }
 
     .ant-form-item-control {
-        line-height: unset;
+        line-height: 32px!important;
+    }
+
+    .add-bar-button{
+        border-top: 1px solid #D9D9D9;
+        text-align: center;
+        line-height: 30px;
+    }
+}
+
+// 带边框风格的
+.add-list-wrapper.add-list-style2{
+    >table{
+        margin: 0 auto;
+    }
+    border: 1px solid rgba(217, 217, 217, 1);
+    border-radius: 4px;
+
+    h4 {
+        padding: 10px;
+        font-size: 14px;
+        color: rgba(1, 1, 1, 0.65);
+        height: 34px;
+        background: rgba(249, 249, 249, 1);
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+
+        line-height: 1;
+        margin-bottom: 10px;
+
+        .tips {
+            font-size: 12px;
+            color: rgba(1, 1, 1, 0.4);
+        }
     }
 }
